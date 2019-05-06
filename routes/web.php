@@ -17,6 +17,9 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/create', 'FileController@showCreateForm')->name('file.form');
+Route::post('/create', 'FileController@create')->name('file.create');
+
 Route::middleware('verified')->group(function() {
 
     // 本登録ユーザーだけ表示できるページ
