@@ -56,5 +56,7 @@ class FileController extends Controller
             Storage::cloud()->delete($file->file_name);
             throw $exception;
         }
+
+        return redirect()->to('/');
     }
 }
