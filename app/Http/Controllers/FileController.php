@@ -13,6 +13,22 @@ use App\File;
 class FileController extends Controller
 {
     /**
+     * ファイル一覧
+     */
+    public function index()
+    {
+        // $files = File::with(['user'])
+        //         ->orderBy(File::CREATED_AT, 'desc')->paginate();
+        $files = File::all();
+        \Log::info(get_class($files));
+        // $data = [];
+        // foreach ($files as $m) {
+        //     $data[]['name'] = $m->url;
+        // }
+        return view('files.index',['files' => $files]);
+    }
+
+    /**
      * フォームを表示
      */
     public function showCreateForm()
@@ -37,8 +53,18 @@ class FileController extends Controller
             return false;
         }
 
+        $characters = array_merge(
+            range(0, 9), range('a', 'z'),
+            range('A', 'Z'), ['-', '_']
+        );
+        $length = count($characters);
+        $id = "";
+        for ($i = 0; $i < 10; $i++) {
+            $id .= $characters[random_int(0, $length - 1)];
+        }
+
         $file = new File();
-        $file->file_name = $request->file_name;
+        $file->file_name = $request->file_name . $id;
         $file->media_type = $media_type;
 
         // 第３引数のpublicはファイルを公開可能にするため
