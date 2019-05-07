@@ -43,6 +43,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function files()
     {
-        return $this->hasMany('App/File');
+        return $this->hasMany('App\File');
     }
 }

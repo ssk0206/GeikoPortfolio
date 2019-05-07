@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'ImageController@index');
+Route::get('/', 'HomeController@index');
 
 Auth::routes(['verify' => true]);
 
