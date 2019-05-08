@@ -11,9 +11,17 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
-Route::get('/fileindex', 'FileController@index');
 Auth::routes(['verify' => true]);
+
+// 一覧表示(現在はhome.index)
+Route::get('/', 'HomeController@index');
+
+// 一覧表示
+Route::get('/fileindex', 'FileController@index');
+
+// 詳細表示
+Route::get('/files/{id}', 'FileController@show');
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 

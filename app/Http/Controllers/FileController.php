@@ -27,12 +27,16 @@ class FileController extends Controller
         // $files = File::with(['user'])
         //         ->orderBy(File::CREATED_AT, 'desc')->paginate();
         $files = File::all();
-        \Log::info(get_class($files));
-        // $data = [];
-        // foreach ($files as $m) {
-        //     $data[]['name'] = $m->url;
-        // }
+        
         return view('files.index',['files' => $files]);
+    }
+
+    public function show(int $id)
+    {
+        \Log::info('ok');
+        $file = File::where('id', $id)->with(['user'])->first();
+
+        return view('files.show', ['file' => $file]);
     }
 
     /**
