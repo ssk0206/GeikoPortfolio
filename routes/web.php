@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', 'FileController@index');
-
+Route::get('/', 'HomeController@index');
+Route::get('/fileindex', 'FileController@index');
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -21,6 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware('verified')->group(function() {
 
+    // 投稿機能
     Route::get('/create', 'FileController@showCreateForm')->name('file.form');
     Route::post('/create', 'FileController@create')->name('file.create');
 

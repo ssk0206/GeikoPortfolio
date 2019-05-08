@@ -12,6 +12,13 @@ use App\File;
 
 class FileController extends Controller
 {
+
+    public function __construct()
+    {
+        //認証が必要
+        $this->middleware('auth')->except(['index']);
+    }
+
     /**
      * ファイル一覧
      */
