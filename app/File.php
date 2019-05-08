@@ -8,12 +8,22 @@ use Illuminate\Support\Facades\Storage;
 class File extends Model
 {
     /**
-     * リーレーションシップ - usersテーブル
+     * リレーションシップ - usersテーブル
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    /**
+     * リレーションシップ - commentsテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        // return $this->hasMany('App\Comment')->orderBy('id', 'desc');
+        return $this->hasMany('App\Comment');
     }
 
     /**

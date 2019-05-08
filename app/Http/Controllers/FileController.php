@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\File;
-
-
+use App\Http\Requests\StoreComment;
+use App\Comment;
 
 class FileController extends Controller
 {
@@ -33,10 +33,9 @@ class FileController extends Controller
 
     public function show(int $id)
     {
-        \Log::info('ok');
-        $file = File::where('id', $id)->with(['user'])->first();
+        $file = File::where('id', $id)->with(['user', 'comments.user'])->first();
 
-        return view('files.show', ['file' => $file]);
+        return view('files.show', ['file' => $file, 'comments' => $file->comments ]);
     }
 
     /**
@@ -95,5 +94,22 @@ class FileController extends Controller
         }
 
         return redirect()->to('/');
+    }
+
+    /**
+     * コメント投稿
+     * @param File $file
+     * @param StoreComment $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addComment(File $file, StoreComment $request) 
+    {
+        $comment = new Comment();
+        $comment->content = $request->get('content');
+        $comment->file_id = $file->id;
+        $comment->user_id = Auth::user()->id;
+        $file->comments()->save($comment);
+
+        return redirect()->route('file.show', ['id' => $file->id]);
     }
 }
