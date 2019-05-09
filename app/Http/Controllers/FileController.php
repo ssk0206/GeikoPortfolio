@@ -25,9 +25,8 @@ class FileController extends Controller
      */
     public function index()
     {
-        // $files = File::with(['user'])
-        //         ->orderBy(File::CREATED_AT, 'desc')->paginate();
-        $files = File::all();
+        $files = File::with(['user'])
+                ->orderBy(File::CREATED_AT, 'desc')->paginate();
         
         return view('files.index',['files' => $files]);
     }
