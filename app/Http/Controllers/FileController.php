@@ -53,7 +53,7 @@ class FileController extends Controller
      */
     public function create(StoreFileRequest $request)
     {
-        \Log::info($request->file_name);
+        
         // 画像かどうか
         $extension = $request->file->extension();
         $image_extension = ['jpg', 'jpeg', 'gif', 'png'];
@@ -76,9 +76,9 @@ class FileController extends Controller
         }
 
         $file = new File();
-        \Log::info($request->file_name);
+        // \Log::info($request->file_name);
         $file->file_name = $request->file_name . $id;
-        \Log::info($request->file_name . $id );
+        // \Log::info($request->file_name . $id );
         $file->media_type = $media_type;
 
         // 第３引数のpublicはファイルを公開可能にするため
