@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class File extends Model
 {
@@ -27,11 +28,46 @@ class File extends Model
     }
 
     /**
+     * リレーションシップ - usersテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function likes()
+    {
+        // withTimestamps()
+        // likes tableにデータを挿入したとき、created_at, updated_atを更新させるため
+        return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+    }
+
+    /**
      * アクセサ - url
      * @return string
      */
     public function getUrlAttribute()
     {
         return Storage::cloud()->url($this->file_name);
+    }
+
+    /**
+     * アクセサ - likes_count
+     * @return int
+     */
+    public function getLikesCountAttribute()
+    {
+        return $this->likes->count();
+    }
+
+    /**
+     * アクセサ - liked_by_user
+     * @return boolean
+     */
+    public function getLikedByUserAttribute()
+    {
+        if (Auth::guest()) {
+            return false;
+        }
+
+        return $this->likes->contains(function ($user) {
+            return $user->id === Auth::user()->id;
+        });
     }
 }

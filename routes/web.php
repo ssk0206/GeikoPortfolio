@@ -23,17 +23,19 @@ Route::get('/fileindex', 'FileController@index');
 // 詳細表示
 Route::get('/files/{id}', 'FileController@show')->name('file.show');
 
-// コメント追加
-Route::post('/files/{file}/comments', 'FileController@addComment')->name('file.comment');
-
-
-
 
 Route::middleware('verified')->group(function() {
 
     // 投稿機能
     Route::get('/create', 'FileController@showCreateForm')->name('file.form');
     Route::post('/create', 'FileController@create')->name('file.create');
+
+    // コメント追加
+    Route::post('/files/{file}/comments', 'FileController@addComment')->name('file.comment');
+
+    // いいね / 解除
+    Route::put('/files/{id}/like', 'FileController@like')->name('file.like');
+    Route::delete('/files/{id}/like', 'FileController@unlike');
 
     // 本登録ユーザーだけ表示できるページ
     Route::get('verified',  function(){

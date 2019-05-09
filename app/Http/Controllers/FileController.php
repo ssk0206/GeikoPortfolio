@@ -26,7 +26,7 @@ class FileController extends Controller
     public function index()
     {
         $files = File::with(['user'])
-                ->orderBy(File::CREATED_AT, 'desc')->paginate();
+                ->orderBy(File::CREATED_AT, 'desc')->paginate(12);
         
         return view('files.index',['files' => $files]);
     }
@@ -112,6 +112,41 @@ class FileController extends Controller
         $comment->file_id = $file->id;
         $comment->user_id = Auth::user()->id;
         $file->comments()->save($comment);
+
+        return redirect()->route('file.show', ['id' => $file->id]);
+    }
+
+    /**
+     * いいね
+     * @param int $id
+     */
+    public function like(int $id)
+    {
+        $file = File::where('id', $id)->with('likes')->first();
+
+        if (! $file) {
+            abort(404);
+        }
+
+        $file->likes()->detach(Auth::user()->id);
+        $file->likes()->attach(Auth::user()->id);
+
+        return redirect()->route('file.show', ['id' => $file->id]);
+    }
+
+    /**
+     * いいね解除
+     * @param int $id
+     */
+    public function unlike(int $id)
+    {
+        $file = File::where('id', $id)->with('likes')->first();
+
+        if (! $file) {
+            abort(404);
+        }
+
+        $file->likes()->detach(Auth::user()->id);
 
         return redirect()->route('file.show', ['id' => $file->id]);
     }
