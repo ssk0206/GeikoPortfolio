@@ -23,6 +23,11 @@ Route::get('/fileindex', 'FileController@index');
 // 詳細表示
 Route::get('/files/{id}', 'FileController@show')->name('file.show');
 
+// ユーザーページ
+Route::get('/users/{id}', 'UserController@show')->name('user.show');
+Route::get('/users/{id}/follows', 'UserController@follows')->name('user.follows');
+Route::get('/users/{id}/followers', 'UserController@followers')->name('user.followers');
+
 
 Route::middleware('verified')->group(function() {
 
@@ -36,6 +41,10 @@ Route::middleware('verified')->group(function() {
     // いいね / 解除
     Route::put('/files/{id}/like', 'FileController@like')->name('file.like');
     Route::delete('/files/{id}/like', 'FileController@unlike');
+
+    // フォロー / 解除
+    Route::put('/users/{id}/follow', 'UserController@follow')->name('user.follow');
+    Route::delete('/users/{id}/follow', 'UserController@unfollow');
 
     // 本登録ユーザーだけ表示できるページ
     Route::get('verified',  function(){

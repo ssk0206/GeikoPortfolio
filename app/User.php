@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -44,5 +45,56 @@ class User extends Authenticatable implements MustVerifyEmail
     public function files()
     {
         return $this->hasMany('App\File');
+    }
+
+    /**
+     * リレーションシップ usersテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function follows()
+    {
+        return $this->belongsToMany('App\User', 'relationships', 'follower_id', 'follow_id');
+    }
+
+    /**
+     * リレーションシップ usersテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function followers()
+    {
+        return $this->belongsToMany('App\User', 'relationships', 'follow_id', 'follower_id');
+    }
+
+    /**
+     * アクセサ - follows_count
+     * @return int
+     */
+    public function getFollowsCountAttribute()
+    {
+        return $this->follows->count();
+    }
+
+    /**
+     * アクセサ - followers_count
+     * @return int
+     */
+    public function getFollowersCountAttribute()
+    {
+        return $this->followers->count();
+    }
+
+    /**
+     * アクセサ - followed_by_user
+     * @return boolean
+     */
+    public function getFollowedByUserAttribute()
+    {
+        if (Auth::guest()) {
+            return false;
+        }
+
+        return $this->followers->contains(function ($user) {
+            return $user->id === Auth::user()->id;
+        });
     }
 }
