@@ -14,12 +14,14 @@
     </div>
     {{-- 投稿削除ボタン --}}
     <div style="display:inline-block;">
-        @if ($file->user_id === Auth::user()->id)
-            <form action="{{ route('file.delete', ['id' => $file->id]) }}" method="POST" style="display:inline">
-                {{ csrf_field() }}
-                <input type="hidden" name="_method" value="DELETE">
-                <input class="btn btn-danger" type="submit" value="投稿削除">
-            </form>
+        @if (Auth::check())
+            @if ($file->user_id === Auth::user()->id)
+                <form action="{{ route('file.delete', ['id' => $file->id]) }}" method="POST" style="display:inline">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input class="btn btn-danger" type="submit" value="投稿削除">
+                </form>
+            @endif
         @endif
     </div>
     {{-- いいね機能 --}}
@@ -46,7 +48,7 @@
         @if (Auth::check())
             <form action="{{ route('file.comment', ['file' => $file]) }}" method="POST">
                 {{ csrf_field() }}
-                <textarea name="content" id="" cols="40" rows="1" style="vertical-align : middle;">{{ old('content') }}</textarea>
+                <textarea name="content" id="" cols="54" rows="1" style="vertical-align : middle;">{{ old('content') }}</textarea>
                 <input class="btn btn-primary" type="submit" value="コメント">
             </form>
         @endif

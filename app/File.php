@@ -49,7 +49,7 @@ class File extends Model
      */
     public function getUrlAttribute()
     {
-        return Storage::cloud()->url($this->file_name);
+        return Storage::cloud()->url($this->s3_name);
     }
 
     /**

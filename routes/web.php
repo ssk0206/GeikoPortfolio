@@ -15,7 +15,7 @@ Auth::routes(['verify' => true]);
 Route::get('/home', 'HomeController@index')->name('home');
 
 // 一覧表示(現在はhome.index)
-Route::get('/', 'HomeController@index');
+Route::get('/', 'FileController@index');
 
 // 一覧表示
 Route::get('/fileindex', 'FileController@index');
