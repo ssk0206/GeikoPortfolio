@@ -41,12 +41,12 @@
             <form action="{{ route('file.comment', ['file' => $file]) }}" method="POST">
                 {{ csrf_field() }}
                 <textarea name="content" id="" cols="40" rows="1" style="vertical-align : middle;">{{ old('content') }}</textarea>
-                <input type="submit" value="コメント">
+                <input class="btn btn-primary" type="submit" value="コメント">
             </form>
         @endif
         <div>
             @foreach ($comments as $comment)
-                <div>
+                <div style="margin:10px;">
                     <span style="font-weight:bold;padding-right:20px;">
                         {{$comment->user->name }}
                     </span>
@@ -56,7 +56,7 @@
                             <form action="{{ route('file.deleteComment', ['id' => $file->id, 'file_id' => $comment->id]) }}" method="POST" style="display:inline">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="_method" value="DELETE">
-                                <input type="submit" value="削除">
+                                <input class="btn btn-danger" type="submit" value="削除">
                             </form>
                         @endif
                     @endif
