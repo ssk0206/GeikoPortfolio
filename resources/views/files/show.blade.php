@@ -9,12 +9,7 @@
             <video src="{{$file->url}}" style="width:400px;margin:10px 0;" controls></video>
         @endif
         
-        @if ($extension)
-            <p style="text-align:center;font-size:22px;">{{ mb_substr($file->file_name, 0,  mb_strlen($file->file_name) - 11 - strlen($extension)) }}</p>
-        @else
-            <p style="text-align:center;font-size:22px;">{{ mb_substr($file->file_name, 0,  mb_strlen($file->file_name) - 10) }}</p>
-        @endif
-        
+        <p style="text-align:center;font-size:22px;">{{ $file->file_name }}</p>
         <p style="text-align:center;font-size:20px;">{{$file->user->name}}</p>
     </div>
     {{-- 投稿削除ボタン --}}

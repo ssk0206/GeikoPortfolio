@@ -31,6 +31,9 @@ class FileController extends Controller
         return view('files.index',['files' => $files]);
     }
 
+    /**
+     * ファイル詳細画面
+     */
     public function show(int $id)
     {
         $file = File::where('id', $id)->with(['user', 'comments.user'])->first();
@@ -56,8 +59,6 @@ class FileController extends Controller
      */
     public function create(StoreFileRequest $request)
     {
-        
-        // 画像かどうか
         $extension = $request->file->extension();
 
         $image_extension = ['jpg', 'jpeg', 'gif', 'png'];
@@ -80,19 +81,19 @@ class FileController extends Controller
             range('A', 'Z'), ['-', '_']
         );
         $length = count($characters);
-        $id = "";
-        for ($i = 0; $i < 10; $i++) {
-            $id .= $characters[random_int(0, $length - 1)];
+        $s3_id = "";
+        for ($i = 0; $i < 12; $i++) {
+            $s3_id .= $characters[random_int(0, $length - 1)];
         }
 
         $file = new File();
-        // \Log::info($request->file_name);
-        $file->file_name = $request->file_name . $id . $extension;
-        // \Log::info($request->file_name . $id );
+        $file->file_name = $request->file_name;
+        $file->s3_name = $s3_id.'.' .$extension;
+        $file->extension = $extension;
         $file->media_type = $media_type;
 
         // 第３引数のpublicはファイルを公開可能にするため
-        Storage::cloud()->putFileAs('', $request->file, $file->file_name, 'public');
+        Storage::cloud()->putFileAs('', $request->file, $file->s3_name, 'public');
 
         // データベースエラー時にファイル削除を行うため
         // トランザクションを利用する
@@ -103,7 +104,7 @@ class FileController extends Controller
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollback();
-            Storage::cloud()->delete($file->file_name);
+            Storage::cloud()->delete($file->s3_name);
             throw $exception;
         }
 
