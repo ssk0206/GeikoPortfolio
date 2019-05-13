@@ -35,6 +35,10 @@ class FileController extends Controller
     {
         $file = File::where('id', $id)->with(['user', 'comments.user'])->first();
 
+        if (! $file) {
+            abort(404);
+        }
+
         return view('files.show', ['file' => $file, 'comments' => $file->comments ]);
     }
 
@@ -94,6 +98,21 @@ class FileController extends Controller
             DB::rollback();
             Storage::cloud()->delete($file->file_name);
             throw $exception;
+        }
+
+        return redirect()->to('/');
+    }
+
+    /**
+     * ファイル削除
+     * @param int $id
+     */
+    public function delete(int $id)
+    {
+        $file = File::where('id', $id)->first();
+
+        if ($file->user->id === Auth::user()->id) {
+            $file->delete();
         }
 
         return redirect()->to('/');

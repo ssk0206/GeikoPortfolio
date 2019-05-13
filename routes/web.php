@@ -34,6 +34,9 @@ Route::middleware('verified')->group(function() {
     // 投稿機能
     Route::get('/create', 'FileController@showCreateForm')->name('file.form');
     Route::post('/create', 'FileController@create')->name('file.create');
+    
+    // 投稿削除
+    Route::delete('files/{id}/delete', 'FileController@delete')->name('file.delete');
 
     // コメント追加 / 削除
     Route::post('/files/{file}/comments', 'FileController@addComment')->name('file.comment');

@@ -5,9 +5,14 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
+    use SoftDeletes;
+
+    protected $datas = ['deleted_at'];
+
     /**
      * リレーションシップ - usersテーブル
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
