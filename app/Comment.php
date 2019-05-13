@@ -14,4 +14,13 @@ class Comment extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    /**
+     * リレーションシップ - filesテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function file()
+    {
+        return $this->belongsTo('App\File');
+    }
 }

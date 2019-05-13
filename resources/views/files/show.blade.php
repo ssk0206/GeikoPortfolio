@@ -27,14 +27,30 @@
         @endif
     </div>
     <div>
-        <form action="{{ route('file.comment', ['file' => $file]) }}" method="POST">
-            {{ csrf_field() }}
-            <textarea name="content" id="" cols="40" rows="2">{{ old('content') }}</textarea>
-            <input type="submit" value="コメント">
-        </form>
+        @if (Auth::check())
+            <form action="{{ route('file.comment', ['file' => $file]) }}" method="POST">
+                {{ csrf_field() }}
+                <textarea name="content" id="" cols="40" rows="2">{{ old('content') }}</textarea>
+                <input type="submit" value="コメント">
+            </form>
+        @endif
         <div>
             @foreach ($comments as $comment)
-                <p><span style="font-weight:bold;padding-right:20px;">{{$comment->user->name }}</span>{{ $comment->content }}</p>
+                <div>
+                    <span style="font-weight:bold;padding-right:20px;">
+                        {{$comment->user->name }}
+                    </span>
+                    {{ $comment->content }}
+                    @if (! Auth::guest())
+                        @if ($comment->user_id === Auth::user()->id)
+                            <form action="{{ route('file.deleteComment', ['id' => $file->id, 'file_id' => $comment->id]) }}" method="POST" style="display:inline">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="削除">
+                            </form>
+                        @endif
+                    @endif
+                </div>
             @endforeach
         </div>
     </div>

@@ -35,8 +35,9 @@ Route::middleware('verified')->group(function() {
     Route::get('/create', 'FileController@showCreateForm')->name('file.form');
     Route::post('/create', 'FileController@create')->name('file.create');
 
-    // コメント追加
+    // コメント追加 / 削除
     Route::post('/files/{file}/comments', 'FileController@addComment')->name('file.comment');
+    Route::delete('/files/{id}/comments/{comment_id}', 'FileController@deleteComment')->name('file.deleteComment');
 
     // いいね / 解除
     Route::put('/files/{id}/like', 'FileController@like')->name('file.like');

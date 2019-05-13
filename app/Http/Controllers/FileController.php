@@ -17,7 +17,7 @@ class FileController extends Controller
     public function __construct()
     {
         //認証が必要
-        $this->middleware('auth')->except(['index']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
     /**
@@ -103,7 +103,7 @@ class FileController extends Controller
      * コメント投稿
      * @param File $file
      * @param StoreComment $request
-     * @return \Illuminate\Http\Response
+     * @return 
      */
     public function addComment(File $file, StoreComment $request) 
     {
@@ -114,6 +114,24 @@ class FileController extends Controller
         $file->comments()->save($comment);
 
         return redirect()->route('file.show', ['id' => $file->id]);
+    }
+
+    /**
+     * コメント削除
+     * @param int $id
+     * @param int $comment_id
+     * @return 
+     */
+    public function deleteComment(int $id, int $comment_id)
+    {
+        $comment = Comment::where('id', $comment_id)->first();
+        $user_id = $comment->user_id;
+
+        if ($user_id === Auth::user()->id) {
+            $comment->delete();
+        }
+
+        return redirect()->route('file.show', ['id' => $id]);
     }
 
     /**
