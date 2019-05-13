@@ -39,7 +39,7 @@ class FileController extends Controller
             abort(404);
         }
 
-        return view('files.show', ['file' => $file, 'comments' => $file->comments ]);
+        return view('files.show', ['file' => $file, 'comments' => $file->comments, 'extension' => $file->extension ]);
     }
 
     /**
@@ -59,11 +59,18 @@ class FileController extends Controller
         
         // 画像かどうか
         $extension = $request->file->extension();
+
         $image_extension = ['jpg', 'jpeg', 'gif', 'png'];
-        $key = in_array($extension, $image_extension);
+        $movie_extension = ['mp4', 'mov'];
+
+        $key_image = in_array($extension, $image_extension);
+        $key_movie = in_array($extension, $movie_extension);
+
         $media_type = '';
-        if ($key) {
+        if ($key_image) {
             $media_type = 'image';
+        } elseif ($key_movie) {
+            $media_type = 'movie';
         } else {
             return false;
         }
@@ -80,7 +87,7 @@ class FileController extends Controller
 
         $file = new File();
         // \Log::info($request->file_name);
-        $file->file_name = $request->file_name . $id;
+        $file->file_name = $request->file_name . $id . $extension;
         // \Log::info($request->file_name . $id );
         $file->media_type = $media_type;
 

@@ -3,21 +3,32 @@
 @section('content')
 <div class="container">  
     <div style="display:inline-block; padding-bottom:20px;">
-        <img src="{{$file->url}}" alt="" style="width:200px;">
-        <p style="text-align:center;font-size:22px;">{{ mb_substr($file->file_name, 0,  mb_strlen($file->file_name) - 10) }}</p>
-        <p style="text-align:center;">{{$file->user->name}}</p>
+        @if ($file->media_type == 'image')
+            <img src="{{$file->url}}" alt="" style="width:300px;margin:10px 0;">
+        @else
+            <video src="{{$file->url}}" style="width:400px;margin:10px 0;" controls></video>
+        @endif
+        
+        @if ($extension)
+            <p style="text-align:center;font-size:22px;">{{ mb_substr($file->file_name, 0,  mb_strlen($file->file_name) - 11 - strlen($extension)) }}</p>
+        @else
+            <p style="text-align:center;font-size:22px;">{{ mb_substr($file->file_name, 0,  mb_strlen($file->file_name) - 10) }}</p>
+        @endif
+        
+        <p style="text-align:center;font-size:20px;">{{$file->user->name}}</p>
     </div>
+    {{-- 投稿削除ボタン --}}
     <div style="display:inline-block;">
         @if ($file->user_id === Auth::user()->id)
             <form action="{{ route('file.delete', ['id' => $file->id]) }}" method="POST" style="display:inline">
                 {{ csrf_field() }}
                 <input type="hidden" name="_method" value="DELETE">
-                <input type="submit" value="投稿削除">
+                <input class="btn btn-danger" type="submit" value="投稿削除">
             </form>
         @endif
     </div>
-    <div style="padding-bottom:10px;">
-        {{-- いいね機能 --}}
+    {{-- いいね機能 --}}
+    <div style="padding-bottom:10px;">      
         @if ($file->liked_by_user)
             <form action="{{ route('file.like', ['id' => $file->id]) }}" method="POST">
                 {{ csrf_field() }}
