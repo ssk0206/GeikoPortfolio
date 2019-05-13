@@ -40,7 +40,7 @@
         @if (Auth::check())
             <form action="{{ route('file.comment', ['file' => $file]) }}" method="POST">
                 {{ csrf_field() }}
-                <textarea name="content" id="" cols="40" rows="2">{{ old('content') }}</textarea>
+                <textarea name="content" id="" cols="40" rows="1" style="vertical-align : middle;">{{ old('content') }}</textarea>
                 <input type="submit" value="コメント">
             </form>
         @endif
