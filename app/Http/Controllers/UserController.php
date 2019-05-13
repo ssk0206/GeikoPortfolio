@@ -14,8 +14,8 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        $user = User::where('id', $id)->first();
-
+        //filesのページネーションのためにはどうすればいいか
+        $user = User::where('id', $id)->with(['files'])->first();
         return view('users.show', ['user' => $user]);
     }
 
@@ -72,7 +72,6 @@ class UserController extends Controller
     public function followers(int $id)
     {
         $user = User::where('id', $id)->with(['followers'])->first();
-        
         return view('users.followers', ['user' => $user]);
     }
 }

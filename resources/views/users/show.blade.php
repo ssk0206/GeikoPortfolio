@@ -1,37 +1,14 @@
-@extends('layouts.app')
+@extends('users.show_parent')
 
-@section('content')
-<div class="container">
-    <h2>{{$user->name}}</h2>
-    <div style="margin:0 0 20px;">
-        <span style="font-weight:bold">{{$user->follows_count}}</span>
-        <a href="{{ route('user.follows', ['id' => $user->id]) }}">フォロー</a>
-
-        <span style="font-weight:bold">{{$user->followers_count}}</span>
-        <a href="{{ route('user.followers', ['id' => $user->id]) }}">フォロワー</a>
-
-        @if ($user->id !== Auth::user()->id)
-            @if ($user->followed_by_user)
-                <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit"  style="background:deepskyblue;color:white;">
-                        フォロー中
-                    </button>
-                </form>
-            @else
-                <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="_method" value="PUT">
-                    <button type="submit" >
-                        フォロー
-                    </button>
-                </form>
-            @endif      
-        @endif
-    </div>
-    <div>
-        @yield('information')
-    </div>
-</div>
+@section('information')
+    <div class="col-sm-12">
+            @foreach ($user->files as $file)
+            <div style="display:inline-block;margin:10px;">
+                <a href="/files/{{ $file->id }}">
+                    <img src="{{$file->url}}" alt="" style="width:240px;">
+                </a>
+                <p style="text-align:center;">{{ mb_substr($file->file_name, 0,  mb_strlen($file->file_name) - 10) }}</p>
+            </div>
+        @endforeach
+    </div> 
 @endsection
