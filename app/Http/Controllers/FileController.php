@@ -10,10 +10,15 @@ use App\File;
 use App\Http\Requests\StoreComment;
 use App\Comment;
 use App\Http\Requests\StoreFileRequest;
+use FFMpeg;
+use FFMpeg\FFProbe;
+use FFMpeg\Driver\FFMpegDriver;
+
+//use Pbmedia\LaravelFFMpeg\FFMpegFacade as FFMpeg;
 
 class FileController extends Controller
 {
-
+    
     public function __construct()
     {
         //認証が必要
@@ -93,8 +98,7 @@ class FileController extends Controller
         $file->media_type = $media_type;
 
         // 第３引数のpublicはファイルを公開可能にするため
-        Storage::cloud()->putFileAs('', $request->file, $file->s3_name, 'public');
-
+        Storage::cloud()->putFileAs('', $request->file, $file->s3_name, 'public');        
         // データベースエラー時にファイル削除を行うため
         // トランザクションを利用する
         DB::beginTransaction();
