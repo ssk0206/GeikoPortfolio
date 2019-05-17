@@ -44,12 +44,49 @@ class File extends Model
     }
 
     /**
-     * アクセサ - url
+     * アクセサ - image_url
      * @return string
      */
-    public function getUrlAttribute()
+    public function getImageUrlAttribute()
     {
+        // return Storage::cloud()->url($this->s3_name);
+        $folder = substr($this->s3_name,0, 12);
         return Storage::cloud()->url($this->s3_name);
+    }
+
+    /**
+     * アクセサ - movie_url
+     * @return string
+     */
+    public function getMovieUrlAttribute()
+    {
+        // return Storage::cloud()->url($this->s3_name);
+        $folder = substr($this->s3_name,0, 12);
+        $movie = 'https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$folder.'/'.$this->s3_name;
+        return $movie;
+    }
+
+    /**
+     * アクセサ - folder
+     */
+    public function getFolderAttribute()
+    {
+        $folder = mb_substr($this->s3_name,0, 12);
+        \Log::info('folder');
+        return $folder;
+    }
+
+    /**
+     * アクセサ - thumb
+     * @return string
+     */
+    public function getThumbAttribute()
+    {
+        $folder = mb_substr($this->s3_name,0, 12);
+        $file = mb_substr($this->s3_name,0, 12) . '-00001.png';
+        //\Log::info('https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$folder.'/thumbnail-'.$file);
+        $thumb = 'https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$folder.'/thumbnail-'.$file;
+        return $thumb;
     }
 
     /**

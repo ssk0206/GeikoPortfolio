@@ -6,18 +6,15 @@
         <div style="display:inline-block;margin:10px;">
             <a href="/files/{{ $file->id }}">
                 @if ($file->media_type === 'image')
-                    <img src="{{$file->url}}" alt="" style="width:200px;">
+                    <img src="{{$file->image_url}}" style="width:300px;" alt="">
                 @else
-                    <video src="{{$file->url}}" style="width:200px;" id="video">
-                        <source src="myVideo.mp4" type="video/mp4" />
-                        <source src="myVideo.webm" type="video/webm" />
-                    </video>
+                    <img src="{{ route('thumb', $file->id) }}" style="width:300px;" alt="">
                 @endif
             </a>
+            <p style="text-align:center;">{{$file->file_name}}</p>
             <p style="text-align:center;">{{$file->user->name}}</p>
         </div>
     @endforeach
-
     {{ $files->links() }}
 </div>
 @endsection

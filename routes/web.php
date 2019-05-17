@@ -20,6 +20,9 @@ Route::get('/', 'FileController@index');
 // 一覧表示
 Route::get('/fileindex', 'FileController@index');
 
+// サムネイル取得
+Route::get('/thumbnail/{id}', 'ThumbnailController')->name('thumb');
+
 // 詳細表示
 Route::get('/files/{id}', 'FileController@show')->name('file.show');
 
@@ -34,7 +37,7 @@ Route::middleware('verified')->group(function() {
     // 投稿機能
     Route::get('/create', 'FileController@showCreateForm')->name('file.form');
     Route::post('/create', 'FileController@create')->name('file.create');
-    
+
     // 投稿削除
     Route::delete('files/{id}/delete', 'FileController@delete')->name('file.delete');
 
