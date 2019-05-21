@@ -43,7 +43,7 @@
                 <label for="self_introduction">自己紹介・やりたいこと</label>
                 <textarea type="text" name="self_introduction" class="form-control"></textarea>
             </div>
-            <input type="submit" value="送信" class="btn btn-primary" id="upload">
+            <input type="submit" value="変更" class="btn btn-primary" id="upload">
         </form>
     </div> 
 @endsection

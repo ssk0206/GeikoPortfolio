@@ -1,15 +1,22 @@
 @extends('users.show_parent')
 
 @section('information')
-    <div class="col-sm-12">
-        <p>ユーザー一覧</p>
-        @foreach ($users as $user)
-            <div style="display:inline-block;margin:10px;">
-                <a href="/users/{{ $user->id }}">
-                    <p style="text-align:center;">{{$user->name}}</p>                    
-                </a>
-            </div>
-        @endforeach
-        {{ $users->links() }}
+    <div class="col-md-6">
+        <table class="table table-striped">
+            <h4>ユーザー一覧</h4>
+            <tr>
+                <th>ユーザー名</th>
+            </tr>
+            @foreach ($users as $user)
+                <tr>
+                    <td>
+                        <a href="/users/{{ $user->id }}">
+                            <span style="text-align:center;">{{$user->name}}</span>                
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+            {{ $users->links() }}
+        </table>
     </div> 
 @endsection

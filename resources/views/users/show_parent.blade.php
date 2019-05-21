@@ -36,9 +36,9 @@
                         </form>
                     @endif
                 @else
-                    <button class="btn btn-info">
+                    <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-info">
                         ユーザー情報編集
-                    </button>
+                    </a>
                 @endif
             </div>
         </div>
