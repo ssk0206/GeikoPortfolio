@@ -29,6 +29,8 @@ Route::get('/files/{id}', 'FileController@show')->name('file.show');
 // ユーザーページ
 Route::get('/users', 'UserController@index')->name('user.index');
 Route::get('/users/{id}', 'UserController@show')->name('user.show');
+Route::get('/users/{id}/edit', 'UserController@showEditForm')->name('user.edit');
+Route::put('/users/{id}/edit', 'UserController@update')->name('user.update');
 Route::get('/users/{id}/follows', 'UserController@follows')->name('user.follows');
 Route::get('/users/{id}/followers', 'UserController@followers')->name('user.followers');
 

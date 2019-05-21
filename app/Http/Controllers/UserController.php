@@ -38,6 +38,37 @@ class UserController extends Controller
     }
 
     /**
+     * マイページ編集画面
+     */
+    public function showEditForm(int $id)
+    {
+        $user = User::where('id', $id)->first();
+
+        return view('users.edit', ['user' => $user]);
+    }
+
+    /**
+     * マイベージ編集
+     */
+    public function update(Request $request, int $id)
+    {
+        $user = User::where('id', $id)->first();
+
+        if (! $user) {
+            abort(404);
+        }
+ 
+        $user->name = $request->name;
+        $user->grade = $request->grade;
+        $user->department = $request->department;
+        $user->skill = $request->skill;
+        $user->self_introduction = $request->self_introduction;
+        $user->save();
+
+        return redirect()->route('user.show', ['id' => $user->id]);
+    }
+
+    /**
      * フォロー
      */
     public function follow(int $id)

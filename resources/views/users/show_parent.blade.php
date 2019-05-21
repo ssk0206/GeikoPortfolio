@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div style="col-sm-4">
+        <div class="col-md-3">
             <h2><a href="{{ route('user.show', ['id' => $user->id]) }}">{{$user->name}}</a></h2>
             <div style="margin:0 0 20px;">
                 <span style="font-weight:bold">{{$user->follows_count}}</span>
@@ -11,6 +11,11 @@
     
                 <span style="font-weight:bold">{{$user->followers_count}}</span>
                 <a href="{{ route('user.followers', ['id' => $user->id]) }}">フォロワー</a>
+
+                <div>{{$user->grade}}</div>
+                <div>{{$user->department}}</div>
+                <div>{{$user->skill}}</div>
+                <div>{{$user->self_introduction}}</div>
     
                 @if ($user->id !== Auth::user()->id)
                     @if ($user->followed_by_user)
@@ -29,7 +34,11 @@
                                 フォロー
                             </button>
                         </form>
-                    @endif      
+                    @endif
+                @else
+                    <button class="btn btn-info">
+                        ユーザー情報編集
+                    </button>
                 @endif
             </div>
         </div>
