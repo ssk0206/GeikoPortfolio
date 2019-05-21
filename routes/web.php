@@ -25,6 +25,7 @@ Route::get('/thumbnail/{id}', 'ThumbnailController')->name('thumb');
 
 // 詳細表示
 Route::get('/files/{id}', 'FileController@show')->name('file.show');
+Route::get('/files/get/{id}', 'FileController@getFile')->name('file.get');
 
 // ユーザーページ
 Route::get('/users', 'UserController@index')->name('user.index');

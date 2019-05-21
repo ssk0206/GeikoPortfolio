@@ -4,10 +4,9 @@
 <div class="container">  
     <div style="display:inline-block; padding-bottom:20px;">
         @if ($file->media_type == 'image')
-            <img src="{{$file->image_url}}" alt="" style="width:300px;margin:10px 0;">
-        
+            <img src="{{ route('file.get', [ 'id' => $file->id ]) }}" alt="" style="width:300px;margin:10px 0;">
         @else
-            <video src="{{$file->movie_url}}" style="width:400px;margin:10px 0;" controls></video>
+            <video src="{{ route('file.get', [ 'id' => $file->id ]) }}" style="width:400px;margin:10px 0;" controls></video>
         @endif
         
         <p style="text-align:center;font-size:22px;">{{ $file->file_name }}</p>

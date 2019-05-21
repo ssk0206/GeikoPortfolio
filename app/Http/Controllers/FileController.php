@@ -51,6 +51,47 @@ class FileController extends Controller
     }
 
     /**
+     * ファイルを取得
+     */
+    public function getFile(int $id)
+    {
+        $file = File::where('id', $id)->first();
+
+        if (! $file) {
+            abort(404);
+        }
+
+        if ($file->media_type == 'image') {
+            $disk = Storage::disk('s3');
+            try {
+                $url = $file->s3_name;
+                $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/geiko-portfolio/'.$url);
+            } catch (\Exception $e) {
+                header('Content-Type: image/jpeg');
+                return readfile('noimage.jpg');
+            }
+            return response($url)->header('Content-Type', 'image/png');
+        } elseif ($file->media_type == 'movie') {
+            $disk = Storage::disk('s3_2');
+            $url = '';
+            $contents = $disk->files($file->folder);
+            try {
+                //$contents = $disk->files($file->folder);
+                if (substr($contents['0'], -3) == 'mp4') {
+                    $url = $contents['0'];
+                } else {
+                    $url = $contents['1'];
+                }
+                $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$url);
+            } catch (\Exception $e) {
+                header('Content-Type: image/jpeg');
+                return readfile('noimage.jpg');
+            }
+            return response($url)->header('Content-Type', 'video/mp4');
+        }
+    }
+
+    /**
      * フォームを表示
      */
     public function showCreateForm()
@@ -65,9 +106,11 @@ class FileController extends Controller
     public function create(StoreFileRequest $request)
     {
         $extension = $request->file->extension();
-
-        $image_extension = ['jpg', 'jpeg', 'gif', 'png'];
-        $movie_extension = ['mp4', 'mov'];
+        if ($extension == 'qt') {
+            $extension = 'mov';
+        }
+        $image_extension = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg'];
+        $movie_extension = ['mp4', 'mov', 'qt'];
 
         $key_image = in_array($extension, $image_extension);
         $key_movie = in_array($extension, $movie_extension);
@@ -78,7 +121,7 @@ class FileController extends Controller
         } elseif ($key_movie) {
             $media_type = 'movie';
         } else {
-            return false;
+            return redirect()->to('/create');
         }
 
         $characters = array_merge(

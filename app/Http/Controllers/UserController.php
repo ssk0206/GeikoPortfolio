@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\File;
 use App\Relationship;
+use App\Http\Requests\StoreUserInformation;
 
 class UserController extends Controller
 {
@@ -50,7 +51,7 @@ class UserController extends Controller
     /**
      * マイベージ編集
      */
-    public function update(Request $request, int $id)
+    public function update(StoreUserInformation $request, int $id)
     {
         $user = User::where('id', $id)->first();
 
