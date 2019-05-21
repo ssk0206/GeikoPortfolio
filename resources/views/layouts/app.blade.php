@@ -51,6 +51,9 @@
                             @endif
                         @else
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/users') }}">ユーザー一覧</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ url('/create') }}">投稿</a>
                             </li>
                             <li class="nav-item dropdown">

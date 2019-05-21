@@ -27,6 +27,7 @@ Route::get('/thumbnail/{id}', 'ThumbnailController')->name('thumb');
 Route::get('/files/{id}', 'FileController@show')->name('file.show');
 
 // ユーザーページ
+Route::get('/users', 'UserController@index')->name('user.index');
 Route::get('/users/{id}', 'UserController@show')->name('user.show');
 Route::get('/users/{id}/follows', 'UserController@follows')->name('user.follows');
 Route::get('/users/{id}/followers', 'UserController@followers')->name('user.followers');

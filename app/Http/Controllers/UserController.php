@@ -11,14 +11,29 @@ use App\Relationship;
 class UserController extends Controller
 {
     /**
+     * ユーザー一覧
+     */
+    public function index()
+    {
+        $users = User::orderBy(File::CREATED_AT, 'desc')->paginate(20);
+        return view('users.index', ['users' => $users]);
+    }
+
+    /**
      * マイページ表示
      */
     public function show(int $id)
     {
         //filesのページネーションのためにはどうすればいいか
         #$user = User::where('id', $id)->with(['files'])->first();
-        $files = File::where('user_id', $id)->orderBy(File::CREATED_AT, 'desc')->paginate(9);
-        $user = $files[0]->user;
+        $files = File::where('user_id', $id)->orderBy(File::CREATED_AT, 'desc')->paginate(12);
+        $user = '';
+        if (count($files) > 0) {
+            $user = $files[0]->user;
+        } else {
+            $user = User::where('id', $id)->first();
+        }
+
         return view('users.show', ['user' => $user, 'files' => $files]);
     }
 
