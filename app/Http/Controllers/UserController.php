@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\File;
 use App\Relationship;
 
 class UserController extends Controller
@@ -15,8 +16,10 @@ class UserController extends Controller
     public function show(int $id)
     {
         //filesのページネーションのためにはどうすればいいか
-        $user = User::where('id', $id)->with(['files'])->first();
-        return view('users.show', ['user' => $user]);
+        #$user = User::where('id', $id)->with(['files'])->first();
+        $files = File::where('user_id', $id)->orderBy(File::CREATED_AT, 'desc')->paginate(9);
+        $user = $files[0]->user;
+        return view('users.show', ['user' => $user, 'files' => $files]);
     }
 
     /**
