@@ -62,10 +62,10 @@ class FileController extends Controller
         }
 
         if ($file->media_type == 'image') {
-            $disk = Storage::disk('s3');
+            #$disk = Storage::disk('s3_');
             try {
                 $url = $file->s3_name;
-                $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/geiko-portfolio/'.$url);
+                $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$url);
             } catch (\Exception $e) {
                 header('Content-Type: image/jpeg');
                 return readfile('noimage.jpg');
@@ -141,7 +141,13 @@ class FileController extends Controller
         $file->media_type = $media_type;
 
         // 第３引数のpublicはファイルを公開可能にするため
-        Storage::cloud()->putFileAs('', $request->file, $file->s3_name, 'public');        
+        if ($file->media_type == 'movie') {
+            $disk = Storage::disk('s3');
+            $disk->putFileAs('', $request->file, $file->s3_name, 'public');   
+        } elseif ($file->media_type == 'image') {
+            $disk = Storage::disk('s3_2');
+            $disk->putFileAs('', $request->file, $file->s3_name, 'public');
+        }
         // データベースエラー時にファイル削除を行うため
         // トランザクションを利用する
         DB::beginTransaction();

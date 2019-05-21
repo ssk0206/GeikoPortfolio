@@ -18,10 +18,10 @@ class ThumbnailController extends Controller
         }
 
         if ($file->media_type == 'image') {
-            $disk = Storage::disk('s3');
+            #$disk = Storage::disk('s3_2');
             try {
                 $url = $file->s3_name;
-                $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/geiko-portfolio/'.$url);
+                $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$url);
             } catch (\Exception $e) {
                 header('Content-Type: image/jpeg');
                 return readfile('noimage.jpg');
