@@ -5,9 +5,13 @@
             @foreach ($user->files as $file)
             <div style="display:inline-block;margin:10px;">
                 <a href="/files/{{ $file->id }}">
-                    <img src="{{$file->url}}" alt="" style="width:240px;">
+                    @if ($file->media_type === 'image')
+                        <img src="{{$file->image_url}}" style="width:300px;" alt="">
+                    @else
+                        <img src="{{ route('thumb', $file->id) }}" style="width:300px;" alt="">
+                    @endif
                 </a>
-                <p style="text-align:center;">{{ mb_substr($file->file_name, 0,  mb_strlen($file->file_name) - 10) }}</p>
+                <p style="text-align:center;">{{$file->file_name}}</p>
             </div>
         @endforeach
     </div> 
