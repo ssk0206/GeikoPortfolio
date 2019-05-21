@@ -30,7 +30,7 @@
             <form action="{{ route('file.like', ['id' => $file->id]) }}" method="POST">
                 {{ csrf_field() }}
                 <input type="hidden" name="_method" value="DELETE">
-                <button type="submit"  style="background:hotpink;color:white;">
+                <button type="submit" class="btn btn-primary" style="background:hotpink;color:white;">
                     <i class="icon ion-md-heart" style="padding-right:6px;"></i>{{$file->likes_count}}
                 </button>
             </form>
@@ -38,7 +38,7 @@
             <form action="{{ route('file.like', ['id' => $file->id]) }}" method="POST">
                 {{ csrf_field() }}
                 <input type="hidden" name="_method" value="PUT">
-                <button type="submit" >
+                <button type="submit"  class="btn btn-momal" style="border:hotpink 1px solid;" >
                     <i class="icon ion-md-heart" style="color:hotpink; padding-right:6px;"></i>{{$file->likes_count}}
                 </button>
             </form>
