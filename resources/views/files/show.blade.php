@@ -62,7 +62,7 @@
                     <span style="font-weight:bold;padding-right:20px;">
                         {{$comment->user->name }}
                     </span>
-                    <span style="font-weight:bold;">
+                    <span style="font-weight:bold;padding-right:20px;">
                         {{ $comment->content }}
                     </span>
                     @if (! Auth::guest())
