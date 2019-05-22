@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="container">
-    <div class="row" style="margin-left:0px;">
+    <div class="row  justify-content-center">
         @foreach ($files as $file)
-            <div class="col-xs-2" style="display:inline-block;margin:0px;padding:0;">
-                <a href="/files/{{ $file->id }}">
-                    <img src="{{ route('thumb', $file->id) }}" class="img-thumbnail img-fluid"  style="width:142px; height:142px; object-fit: cover;" alt="">
-                </a>
-                <h6 style="text-align:center;font-weight:bold;">{{$file->file_name}}</h6>
-                <div style="text-align:center;">{{$file->user->name}}</div>
+            <div class="col-6 col-sm-3 col-md-2" style="padding:5px;text-align:center;">
+                <a href="/files/{{ $file->id }}" style="text-alian:center;">
+                    <img class="img-thumbnail" src="{{ route('thumb', $file->id) }}" style="object-fit: cover; height:150px;width:150px;" alt="">
+                    <div style="text-align:center;font-weight:bold;max-width:150px;margin:auto;">{{$file->file_name}}</div>
+                </a>  
+                <div style="text-align:center;max-width:150px;margin:auto;">{{$file->user->name}}</div>
             </div>
         @endforeach       
     </div>

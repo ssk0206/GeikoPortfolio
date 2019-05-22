@@ -62,7 +62,6 @@ class FileController extends Controller
         }
 
         if ($file->media_type == 'image') {
-            #$disk = Storage::disk('s3_');
             try {
                 $url = $file->s3_name;
                 $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$url);
@@ -95,7 +94,7 @@ class FileController extends Controller
 
                 // コンテンツの識別子
                 $etag = md5($_SERVER["REQUEST_URI"]).$size;
-                //\Log::info($etag);
+
                 // ブラウザがHTTP_RANGEを要求してきた場合
                 if(@$_SERVER["HTTP_RANGE"]){
 
@@ -154,9 +153,7 @@ class FileController extends Controller
     public function create(StoreFileRequest $request)
     {
         $extension = $request->file->extension();
-        if ($extension == 'qt') {
-            $extension = 'mov';
-        }
+
         $image_extension = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg'];
         $movie_extension = ['mp4', 'mov', 'qt'];
 
@@ -172,15 +169,8 @@ class FileController extends Controller
             return redirect()->to('/create');
         }
 
-        $characters = array_merge(
-            range(0, 9), range('a', 'z'),
-            range('A', 'Z'), ['-', '_']
-        );
-        $length = count($characters);
-        $s3_id = "";
-        for ($i = 0; $i < 12; $i++) {
-            $s3_id .= $characters[random_int(0, $length - 1)];
-        }
+        #s3用のID生成
+        $s3_id = substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-'), 0, 12);
 
         $file = new File();
         $file->file_name = $request->file_name;
