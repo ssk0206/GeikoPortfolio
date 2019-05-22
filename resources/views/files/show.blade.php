@@ -6,7 +6,9 @@
         @if ($file->media_type == 'image')
             <img class="col-md-6" src="{{ route('file.get', [ 'id' => $file->id ]) }}" alt="" style="margin:10px 0; padding:0;">
         @else
-            <video class="col-md-6" src="{{ route('file.get', [ 'id' => $file->id ]) }}" style="margin:10px 0; padding:0;" controls controlslist="nodownload"></video>
+            <video class="col-md-6" muted="muted" style="margin:10px 0; padding:0;" controls="controls" controlslist="nodownload">
+                <source src="{{ route('file.get', [ 'id' => $file->id ]) }}">
+            </video>
         @endif
         
         <h3 style="font-size:20px;">{{ $file->file_name }}</h3>
