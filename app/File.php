@@ -72,7 +72,7 @@ class File extends Model
     public function getFolderAttribute()
     {
         $folder = mb_substr($this->s3_name,0, 12);
-        \Log::info('folder');
+
         return $folder;
     }
 
