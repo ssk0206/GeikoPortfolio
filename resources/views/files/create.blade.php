@@ -7,7 +7,7 @@
 		<form action="/create" method="POST" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			<div class="form-group">
-				<label for="file">動画・画像</label>
+				<label for="file">動画・画像（1GB以下のファイル）</label>
 				<input type="file" name="file" class="form-control-file" required>
 			</div>
 			<div class="form-group">
