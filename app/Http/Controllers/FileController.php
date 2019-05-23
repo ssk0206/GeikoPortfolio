@@ -21,7 +21,7 @@ class FileController extends Controller
     
     public function __construct()
     {
-        //認証が必要
+        //ログインが必要ではないもの
         $this->middleware('auth')->except(['index', 'show', 'getFile']);
     }
 
@@ -199,7 +199,7 @@ class FileController extends Controller
             throw $exception;
         }
 
-        return redirect()->to('/');
+        return redirect()->to('/')->with('message', 'ファイルを投稿しました。');
     }
 
     /**
@@ -214,7 +214,7 @@ class FileController extends Controller
             $file->delete();
         }
 
-        return redirect()->to('/');
+        return redirect()->to('/')->with('message', 'ファイルを削除しました。');
     }
 
     /**

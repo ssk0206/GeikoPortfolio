@@ -42,11 +42,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">ログイン</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">新規登録</a>
                                 </li>
                             @endif
                         @else
@@ -69,7 +69,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        ログアウト
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -93,9 +93,13 @@
                     </ul>
                 </div>
             @endif
+            {{-- フラッシュメッセージの表示 --}}
+            @if (session('message'))
+                <div class="alert alert-success">{{ session('message') }}</div>
+            @endif
         </div>
 
-        <main>
+        <main class="py-4">
             @yield('content')
         </main>
     </div>

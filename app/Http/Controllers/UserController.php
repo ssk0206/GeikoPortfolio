@@ -11,6 +11,13 @@ use App\Http\Requests\StoreUserInformation;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        //認証が必要
+        $this->middleware('auth')->except(['index']);
+    }
+
+
     /**
      * ユーザー一覧
      */
