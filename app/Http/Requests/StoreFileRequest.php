@@ -24,7 +24,7 @@ class StoreFileRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required|mimes:jpg,png,jpeg,bmp,gif,svg,mp4,qt',
+            'file' => 'required|mimes:jpg,png,jpeg,bmp,gif,svg,mp4,qt|max:1000000', //1GB以下
             'file_name' => 'required',
         ];
     }
