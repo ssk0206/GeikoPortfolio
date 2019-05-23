@@ -55,7 +55,7 @@ return [
             'visibility' => 'public',
         ],
 
-        's3' => [
+        's3_original' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
@@ -64,7 +64,7 @@ return [
             'url' => env('AWS_URL'),
         ],
 
-        's3_2' => [
+        's3_transcoder' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),

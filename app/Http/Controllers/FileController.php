@@ -56,73 +56,31 @@ class FileController extends Controller
      */
     public function getFile(int $id, Request $request, Response $response)
     {
-        $file = File::where('id', $id)->first();
+        $file = File::where('id', $id)->first();       
 
         if (! $file) {
             abort(404);
         }
 
+        $disk = Storage::disk('s3_transcoder');
+        
         if ($file->media_type == 'image') {
+            $url = '';
             try {
-                $url = $file->s3_name;
-                $url = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$url);
+                $url = file_get_contents($disk->url($file->s3_name));
             } catch (\Exception $e) {
-                header('Content-Type: image/jpeg');
-                return readfile('noimage.jpg');
-            }
+                $file = file_get_contents(storage_path('app/public/noimage.jpg'));
+                return response($file)->header('Content-Type', 'image/jpeg');
+            }      
             return response($url)->header('Content-Type', 'image/png');
 
         } elseif ($file->media_type == 'movie') {
             try {
-                $disk = Storage::disk('s3_2');
-                
-                $contents = $disk->files($file->folder);
-                $url = '';
-                if (substr($contents['0'], -3) == 'mp4') {
-                    $url = $contents['0'];
-                } else {
-                    $url = $contents['1'];
-                }
-
-                $lines = file_get_contents('https://s3-ap-northeast-1.amazonaws.com/transcoder-data/'.$url);
-                $size = strlen($lines);
-                $start = 0;
-                $etag = md5($request->path()).$size;
-                // ブラウザがHTTP_RANGEを要求してきた場合
-                if($request->server('HTTP_RANGE', false)){
-
-                    // 要求された開始位置と終了位置を取得
-                    list($start,$end) = sscanf($request->server('HTTP_RANGE'),"bytes=%d-%d");
-
-                    // 終了位置が指定されていない場合(適当に1000000bytesづつ出す)
-                    if(empty($end)) {
-                        $end = $start + 1000000 - 1;
-                    }
-                    // 終了位置がファイルサイズを超えた場合
-                    if($end>=($size-1)) {
-                        $end = $size - 1;
-                    }
-
-                    // 部分コンテンツであることを伝え、コンテンツ範囲を伝える
-                    $response->setStatusCode(206)
-                            ->header("Content-Range", "bytes {$start}-{$end}/{$size}");
-
-                    // 実際に送信するコンテンツ長: 終了位置 - 開始位置 + 1
-                    $size = $end - $start + 1;
-                }
-
-                // HTTP_RANGE(部分リクエスト)に対応していることを伝える
-                $response->header("Accept-Ranges", "bytes")
-                        ->header("Content-Type", "video/mp4")
-                        ->header("Content-Length", "{$size}")
-                        ->header("Etag", "\"{$etag}\"")
-                        ->setContent(substr($lines, $start, $size));
-                
-                return $response;
-
+                // private関数 getMovie
+                return self::getMovie($file, $request, $response);
             } catch (\Exception $e) {
-                $response->header('Content-Type', 'image/jpeg');
-                return readfile('noimage.jpg');
+                $file = file_get_contents(storage_path('app/public/noimage.jpg'));
+                return response($file)->header('Content-Type', 'image/jpeg');
             }
         }
     }
@@ -146,19 +104,20 @@ class FileController extends Controller
         $image_extension = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg'];
         $movie_extension = ['mp4', 'mov', 'qt'];
 
-        $key_image = in_array($extension, $image_extension);
-        $key_movie = in_array($extension, $movie_extension);
-
         $media_type = '';
-        if ($key_image) {
+        $disk = '';
+        // ファイルが画像か動画か
+        if (in_array($extension, $image_extension)) {
             $media_type = 'image';
-        } elseif ($key_movie) {
+            $disk = Storage::disk('s3_transcoder');
+        } elseif (in_array($extension, $movie_extension)) {
             $media_type = 'movie';
+            $disk = Storage::disk('s3_original');
         } else {
             return redirect()->to('/create');
         }
 
-        #s3用のID生成
+        //s3用のID生成
         $s3_id = substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-'), 0, 12);
 
         $file = new File();
@@ -167,14 +126,8 @@ class FileController extends Controller
         $file->extension = $extension;
         $file->media_type = $media_type;
 
-        // 第３引数のpublicはファイルを公開可能にするため
-        if ($file->media_type == 'movie') {
-            $disk = Storage::disk('s3');
-            $disk->putFileAs('', $request->file, $file->s3_name, 'public');   
-        } elseif ($file->media_type == 'image') {
-            $disk = Storage::disk('s3_2');
-            $disk->putFileAs('', $request->file, $file->s3_name, 'public');
-        }
+        $disk->putFileAs('', $request->file, $file->s3_name, 'public'); 
+  
         // データベースエラー時にファイル削除を行うため
         // トランザクションを利用する
         DB::beginTransaction();
@@ -274,5 +227,52 @@ class FileController extends Controller
         $file->likes()->detach(Auth::user()->id);
 
         return redirect()->route('file.show', ['id' => $file->id]);
+    }
+
+
+    /**
+     * 動画を取得
+     */
+    private static function getMovie($file, Request $request, Response $response)
+    {
+        $disk = Storage::disk('s3_transcoder');
+        $contents = $disk->files($file->folder);
+        $url = '';
+        if (substr($contents['0'], -3) == 'mp4') {
+            $url = $contents['0'];
+        } else {
+            $url = $contents['1'];
+        }
+        $lines = file_get_contents($disk->url($url));
+        $size = strlen($lines);
+        $start = 0;
+        $etag = md5($request->path()).$size;
+
+        // ブラウザがHTTP_RANGEを要求してきた場合
+        if($request->server('HTTP_RANGE', false)){
+            // 要求された開始位置と終了位置を取得
+            list($start,$end) = sscanf($request->server('HTTP_RANGE'),"bytes=%d-%d");
+            // 終了位置が指定されていない場合(適当に1000000bytesづつ出す)
+            if(empty($end)) {
+                $end = $start + 1000000 - 1;
+            }
+            // 終了位置がファイルサイズを超えた場合
+            if($end>=($size-1)) {
+                $end = $size - 1;
+            }
+            // 部分コンテンツであることを伝え、コンテンツ範囲を伝える
+            $response->setStatusCode(206)
+                    ->header("Content-Range", "bytes {$start}-{$end}/{$size}");
+            // 実際に送信するコンテンツ長: 終了位置 - 開始位置 + 1
+            $size = $end - $start + 1;
+        }
+
+        // HTTP_RANGE(部分リクエスト)に対応していることを伝える
+        $response->setContent(substr($lines, $start, $size))
+                ->header("Accept-Ranges", "bytes")
+                ->header("Content-Type", "video/mp4")
+                ->header("Content-Length", "{$size}")
+                ->header("Etag", "\"{$etag}\"");              
+        return $response;
     }
 }

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row  justify-content-center">
+<div class="container display:block">
+    <div class="row justify-content-center">
         @foreach ($files as $file)
             <div class="col-6 col-sm-3 col-md-2" style="padding:5px;text-align:center;">
                 <a href="/files/{{ $file->id }}" style="text-alian:center;">
@@ -11,8 +11,8 @@
                 </a>  
                 <div style="text-align:center;max-width:150px;margin:auto;">{{$file->user->name}}</div>
             </div>
-        @endforeach       
-    </div>
-    {{ $files->links() }}
+        @endforeach
+        <div style="margin: 20px 0 0;">{{ $files->links() }}</div>
+    </div> 
 </div>
 @endsection
