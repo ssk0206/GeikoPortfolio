@@ -14,7 +14,7 @@ class UserController extends Controller
     public function __construct()
     {
         //認証が必要
-        $this->middleware('auth')->except(['index']);
+        $this->middleware('auth');
     }
 
 
@@ -130,5 +130,14 @@ class UserController extends Controller
     {
         $user = User::where('id', $id)->with(['followers'])->first();
         return view('users.followers', ['user' => $user]);
+    }
+
+    /**
+     * ユーザー退会
+     */
+    public function delete(int $id)
+    {
+        User::where('id', $id)->delete();
+        return redirect()->to('/')->with('message', '退会が完了しました。');
     }
 }

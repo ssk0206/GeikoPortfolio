@@ -34,6 +34,7 @@ Route::get('/users/{id}/edit', 'UserController@showEditForm')->name('user.edit')
 Route::put('/users/{id}/edit', 'UserController@update')->name('user.update');
 Route::get('/users/{id}/follows', 'UserController@follows')->name('user.follows');
 Route::get('/users/{id}/followers', 'UserController@followers')->name('user.followers');
+Route::delete('/users/{id}/unsubscribe/', 'UserController@delete')->name('user.delete');
 
 
 Route::middleware('verified')->group(function() {

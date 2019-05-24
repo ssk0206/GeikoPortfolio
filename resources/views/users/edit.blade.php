@@ -45,5 +45,12 @@
             </div>
             <input type="submit" value="変更" class="btn btn-primary" id="upload">
         </form>
-    </div> 
+    </div>
+    <div class="col-12 col-sm-12 col-md-12">
+        <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data" style="text-alian:right;">
+            {{ csrf_field() }}
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="退会" class="btn btn-outline-danger" id="delete">
+        </form>
+    </div>
 @endsection
