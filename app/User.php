@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\MustVerifyEmail;
 use App\Notifications\CustomVerifyEmail;
+use App\Notifications\CustomPasswordReset;
 
 class User extends Authenticatable implements MustVerifyEmailContract
 {
@@ -102,12 +103,23 @@ class User extends Authenticatable implements MustVerifyEmailContract
     }
 
     /**
-     * メール確認通知の送信
+     * メール認証通知の送信
      * 
      * @return void
      */
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
+    }
+
+    /**
+     * パスワードリセット通知の送信
+     * 
+     * @param string
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new CustomPasswordReset($token));
     }
 }
