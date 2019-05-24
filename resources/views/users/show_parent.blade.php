@@ -19,6 +19,9 @@
                 <div>{{$user->self_introduction}}</div>
                 <hr>
                 <div>
+                    @guest
+                    @else
+                    
                     @if ($user->id !== Auth::user()->id)
                         @if ($user->followed_by_user)
                             <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
@@ -42,6 +45,7 @@
                             ユーザー情報編集
                         </a>
                     @endif
+                    @endguest
                 </div>
             </div>
         </div>

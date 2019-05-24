@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container display:block">
+<div class="container">
     <div class="row justify-content-center">
         @foreach ($files as $file)
             <div class="col-6 col-sm-3 col-md-2" style="padding:5px;text-align:center;">

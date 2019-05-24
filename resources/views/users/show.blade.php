@@ -1,16 +1,16 @@
 @extends('users.show_parent')
 
-@section('information')
-    <div class="col-md-9">
-        <h4>作品集</h4>
+@section('information') 
+    <div class="col-md-9 row justify-content-center" style="margin-left:5px;">
+        <h4 class="col-12 col-sm-12 col-md-12" style="padding:0;">作品集</h4>
         @foreach ($files as $file)
-            <div style="display:inline-block;">
-                <a href="/files/{{ $file->id }}">
-                    <img src="{{ route('thumb', $file->id) }}" class="img-thumbnail img-fluid"  style="width:160px; height:160px; object-fit: cover;" alt="">
+            <div class="col-6 col-sm-4 col-md-3"  style="padding:5px;text-align:center;">
+                <a href="/files/{{ $file->id }}" style="text-alian:center;">
+                    <img src="{{ route('thumb', $file->id) }}" class="img-thumbnail"  style="width:150px; height:150px; object-fit: cover;" alt="">
                 </a>
-                <p style="text-align:center;">{{$file->file_name}}</p>
+                <div style="text-align:center;max-width:150px;margin:auto;">{{$file->file_name}}</div>
             </div>
         @endforeach
-        {{ $files->links() }}
+        <div style="margin: 20px 0 0;">{{ $files->links() }}</div>
     </div> 
 @endsection
