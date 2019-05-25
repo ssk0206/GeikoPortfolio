@@ -43,6 +43,9 @@ Route::middleware('verified')->group(function() {
     Route::get('/create', 'FileController@showCreateForm')->name('file.form');
     Route::post('/create', 'FileController@create')->name('file.create');
 
+    Route::get('/files/{id}/edit', 'FileController@showEditForm')->name('file.editForm');
+    Route::put('/files/{id}/edit', 'FileController@edit')->name('file.edit');
+
     // 投稿削除
     Route::delete('files/{id}/delete', 'FileController@delete')->name('file.delete');
 

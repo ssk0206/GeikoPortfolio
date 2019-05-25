@@ -14,6 +14,10 @@
 				<label for="file_name">ファイル名</label>
 				<input type="text" name="file_name" class="form-control" required>
 			</div>
+			<div class="form-group">
+				<label for="description">概要</label>
+				<textarea class="form-control" name="description" id="" cols="60" rows="1" >{{ old('content') }}</textarea>
+			</div>
 			<input type="submit" value="投稿" class="btn btn-primary" id="upload">
 		</form>
     </div>

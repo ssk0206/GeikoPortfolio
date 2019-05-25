@@ -11,6 +11,7 @@ use App\Http\Requests\StoreComment;
 use Illuminate\Http\Response;
 use App\Comment;
 use App\Http\Requests\StoreFileRequest;
+use App\Http\Requests\EditFileRequest;
 use FFMpeg;
 use FFMpeg\FFProbe;
 use FFMpeg\Driver\FFMpegDriver;
@@ -119,9 +120,10 @@ class FileController extends Controller
 
         //s3用のID生成
         $s3_id = substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-'), 0, 12);
-
+        var_dump($request->description);
         $file = new File();
         $file->file_name = $request->file_name;
+        $file->description = $request->description;
         $file->s3_name = $s3_id.'.' .$extension;
         $file->extension = $extension;
         $file->media_type = $media_type;
@@ -142,6 +144,42 @@ class FileController extends Controller
         }
 
         return redirect()->to('/')->with('message', 'ファイルを投稿しました。');
+    }
+
+    /**
+     * ファイル編集画面
+     * @param int $id
+     */
+    public function showEditForm(int $id)
+    {
+        $file = File::where('id', $id)->first();
+
+        if (! $file) {
+            abort(404);
+        }
+
+        return view('files.edit', ['file' => $file]);
+    }
+
+    /**
+     * ファイル編集
+     * @param EditFileRequest $request
+     * @param int $id
+     */
+    public function edit(EditFileRequest $request, int $id)
+    {
+        $file = File::where('id', $id)->first();
+
+        if (! $file) {
+            abort(404);
+        }
+
+        $file->file_name = $request->file_name;
+        $file->description = $request->description;
+        $file->save();
+
+        return redirect()->route('file.show', ['file' => $file, 'comments' => $file->comments, 'extension' => $file->extension ])
+                        ->with('message', '編集が完了しました。');
     }
 
     /**

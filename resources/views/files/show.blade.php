@@ -11,16 +11,15 @@
         
         <h3 style="font-size:20px;">{{ $file->file_name }}</h3>
         <h4 style="font-size:18px;">{{$file->user->name}}</h4>
+        <hr>
+        <div>
+            {{ $file->description }}
+        </div>
     </div>
-    {{-- 投稿削除ボタン --}}
     <div class="col-md-3" style="margin-bottom:10px;">
         @if (Auth::check())
             @if ($file->user_id === Auth::user()->id)
-                <form action="{{ route('file.delete', ['id' => $file->id]) }}" method="POST" style="display:inline" onsubmit="return submitChk()">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="_method" value="DELETE">
-                    <input class="btn btn-outline-danger" type="submit" value="投稿削除">
-                </form>
+                <a class="btn btn-outline-primary" href="{{ route('file.edit', ['id' => $file->id ]) }}" value="投稿削除">投稿編集</a>
             @endif
         @endif
     </div>
@@ -80,15 +79,3 @@
     </div>
 </div>
 @endsection
-
-<script>
-    /**
-     * 確認ダイアログの返り値によりフォーム送信
-    */
-    function submitChk () {
-        /* 確認ダイアログ表示 */
-        var flag = confirm ( "投稿を削除してもよろしいですか？\n削除したくない場合は[キャンセル]ボタンを押して下さい");
-        /* send_flg が TRUEなら送信、FALSEなら送信しない */
-        return flag;
-    }
-</script>
