@@ -34,6 +34,12 @@ class UserController extends Controller
     {
         //filesのページネーションのためにはどうすればいいか
         #$user = User::where('id', $id)->with(['files'])->first();
+        $user = User::where('id', $id)->first();
+
+        if (! $user) {
+            abort(404);
+        }
+        
         $files = File::where('user_id', $id)->orderBy(File::CREATED_AT, 'desc')->paginate(12);
         $user = '';
         if (count($files) > 0) {
@@ -51,6 +57,10 @@ class UserController extends Controller
     public function showEditForm(int $id)
     {
         $user = User::where('id', $id)->first();
+
+        if (! $user) {
+            abort(404);
+        }
 
         return view('users.edit', ['user' => $user]);
     }
@@ -119,6 +129,10 @@ class UserController extends Controller
     public function follows(int $id)
     {
         $user = User::where('id', $id)->with(['follows'])->first();
+
+        if (! $user) {
+            abort(404);
+        }
         
         return view('users.follows', ['user' => $user]);
     }
@@ -129,6 +143,11 @@ class UserController extends Controller
     public function followers(int $id)
     {
         $user = User::where('id', $id)->with(['followers'])->first();
+
+        if (! $user) {
+            abort(404);
+        }
+
         return view('users.followers', ['user' => $user]);
     }
 
@@ -137,7 +156,13 @@ class UserController extends Controller
      */
     public function delete(int $id)
     {
-        User::where('id', $id)->delete();
+        $user = User::where('id', $id);
+
+        if (! $user) {
+            abort(404);
+        }
+        
+        $user->delete();
         return redirect()->to('/')->with('message', '退会が完了しました。');
     }
 }

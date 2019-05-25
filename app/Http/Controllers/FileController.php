@@ -223,6 +223,11 @@ class FileController extends Controller
     public function deleteComment(int $id, int $comment_id)
     {
         $comment = Comment::where('id', $comment_id)->first();
+
+        if (! $comment) {
+            abort(404);
+        }
+
         $user_id = $comment->user_id;
 
         if ($user_id === Auth::user()->id) {
