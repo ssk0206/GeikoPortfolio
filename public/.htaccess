@@ -1,6 +1,10 @@
 FallbackResource /index.php
 LimitRequestBody 10485760
 
+memory_limit "128M"
+post_max_size "100M"
+upload_max_filesize "100M"
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
