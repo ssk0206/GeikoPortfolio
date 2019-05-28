@@ -3,7 +3,7 @@
 @section('information')
     <div class="col-md-6">
         <table class="table table-striped">
-            <h4>ユーザー一覧</h4>
+            <h4>全ユーザーリスト</h4>
             <tr>
                 <th>ユーザー名</th>
             </tr>

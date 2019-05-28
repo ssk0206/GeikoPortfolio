@@ -52,7 +52,7 @@
                             @endif
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/users') }}">ユーザー一覧</a>
+                                <a class="nav-link" href="{{ url('/users') }}">ユーザーリスト</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('/create') }}">投稿</a>
