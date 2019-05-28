@@ -9,17 +9,15 @@
             <video class="col-md-6 show-content" src="{{ route('file.get', [ 'id' => $file->id ]) }}" controls playsinline poster="{{ route('thumb', $file->id) }}"></video>
         @endif
         <h3 style="font-size:20px;">{{ $file->file_name }}</h3>
-        <h4 style="font-size:18px;">{{$file->user->name}}</h4>
+        <h4 style="font-size:18px;">{{ $file->user->name }}</h4>
         <hr>
         <div>
             {{ $file->description }}
         </div>
     </div>
     <div class="col-md-3 margin-b10">
-        @if (Auth::check())
-            @if ($file->user_id === Auth::user()->id)
-                <a class="btn btn-outline-primary" href="{{ route('file.edit', ['id' => $file->id ]) }}" value="投稿削除">投稿編集</a>
-            @endif
+        @if (Auth::check() and  Auth::user()->id === $file->user_id)
+            <a class="btn btn-outline-primary" href="{{ route('file.edit', ['id' => $file->id ]) }}" value="投稿削除">投稿編集</a>
         @endif
     </div>
     
@@ -44,6 +42,8 @@
         @endif
     </div>
     <hr>
+
+    {{-- コメント機能 --}}
     <div class="col-md-8">
         @if (Auth::check())
             <form action="{{ route('file.comment', ['file' => $file]) }}" method="POST">
@@ -63,14 +63,12 @@
                     <span class="comment">
                         {{ $comment->content }}
                     </span>
-                    @if (! Auth::guest())
-                        @if ($comment->user_id === Auth::user()->id)
-                            <form action="{{ route('file.deleteComment', ['id' => $file->id, 'file_id' => $comment->id]) }}" method="POST" style="display:inline"  onsubmit="return submitChk()">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <input class="btn btn-outline-danger" type="submit" value="削除">
-                            </form>
-                        @endif
+                    @if (Auth::check() and Auth::user()->id === $comment->user_id)
+                        <form action="{{ route('file.deleteComment', ['id' => $file->id, 'file_id' => $comment->id]) }}" method="POST" style="display:inline"  onsubmit="return submitChk()">
+                            @csrf
+                            @method('DELETE')
+                            <input class="btn btn-outline-danger" type="submit" value="削除">
+                        </form>
                     @endif
                 </div>
             @endforeach

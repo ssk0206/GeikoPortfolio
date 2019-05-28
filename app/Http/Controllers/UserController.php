@@ -32,12 +32,12 @@ class UserController extends Controller
      */
     public function show(int $id)
     {
-        //filesのページネーションのためにはどうすればいいか
-        $user = User::findOrFail($id);
         $files = File::where('user_id', $id)->orderBy(File::CREATED_AT, 'desc')->paginate(12);
         $user = '';
         if (count($files) > 0) {
             $user = $files[0]->user;
+        } else {
+            $user = User::findOrFail($id);
         }
 
         return view('users.show', ['user' => $user, 'files' => $files]);
@@ -49,8 +49,10 @@ class UserController extends Controller
     public function edit(int $id)
     {
         $user = User::findOrFail($id);
+        $departments = config('univ.department');
+        $grades = config('univ.grade');
 
-        return view('users.edit', ['user' => $user]);
+        return view('users.edit', ['user' => $user, 'departments' => $departments, 'grades' => $grades]);
     }
 
     /**

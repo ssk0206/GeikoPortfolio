@@ -19,11 +19,10 @@
                 <div><span class="gray">自己紹介・やりたいこと：</span><br>{{$user->self_introduction}}</div>
                 <hr>
                 <div>
-                    @guest
-                    @else
+                    @auth
                         @if ($user->id !== Auth::user()->id)
                             @if ($user->followed_by_user)
-                                <form action="{{ route('users.follow', ['id' => $user->id]) }}" method="POST">
+                                <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-info">
@@ -31,7 +30,7 @@
                                     </button>
                                 </form>
                             @else
-                                <form action="{{ route('users.follow', ['id' => $user->id]) }}" method="POST">
+                                <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-outline-info" >
@@ -44,7 +43,7 @@
                                 ユーザー情報編集
                             </a>
                         @endif
-                    @endguest
+                    @endauth
                 </div>
             </div>
         </div>
