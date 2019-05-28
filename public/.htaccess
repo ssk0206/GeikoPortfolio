@@ -1,6 +1,18 @@
 FallbackResource /index.php
 LimitRequestBody 10485760
 
+[PHP]
+upload_max_filesize = "200M"
+
+[Date]
+date.timezone = "Asia/Tokyo"
+
+[mbstring]
+mbstring.language = Japanese
+mbstring.internal_encoding = UTF-8
+mbstring.encoding_translation = Off
+mbstring.func_overload = 0
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
