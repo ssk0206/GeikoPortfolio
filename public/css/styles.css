@@ -1,0 +1,65 @@
+.show-content {
+    margin:10px 0;
+    padding:0;
+    max-height: 400px;
+    object-fit:contain;
+}
+
+.comments {
+    margin:10px;
+}
+
+.margin-b10 {
+    margin-bottom: 10px;
+}
+
+.margin-b20 {
+    margin-bottom: 20px;
+}
+
+/* ファイル */
+.files {
+    padding:5px;
+}
+
+.center {
+    text-align: center;
+}
+
+.thumb-img {
+    object-fit: cover; height:150px;width:150px;
+}
+
+.thumb-name {
+    text-align:center;font-weight:bold;max-width:150px;margin:auto;
+}
+
+/* ページネーションリンク */
+.links {
+    margin-top: 20px;
+}
+
+/* いいね */
+.like-button {
+    border:hotpink 1px solid;
+}
+
+.like-i {
+    color:hotpink; padding-right:6px;
+}
+
+.unlike-button {
+    background:hotpink;color:white;
+}
+
+.unlike-i {
+    padding-right:6px;
+}
+
+.inline-flex {
+    display:inline-flex
+}
+
+.comment {
+    font-weight:bold;padding-right:20px;
+}

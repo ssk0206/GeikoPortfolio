@@ -21,30 +21,29 @@
                 <div>
                     @guest
                     @else
-                    
-                    @if ($user->id !== Auth::user()->id)
-                        @if ($user->followed_by_user)
-                            <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit" class="btn btn-info">
-                                    フォロー中
-                                </button>
-                            </form>
+                        @if ($user->id !== Auth::user()->id)
+                            @if ($user->followed_by_user)
+                                <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-info">
+                                        フォロー中
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-outline-info" >
+                                        フォロー
+                                    </button>
+                                </form>
+                            @endif
                         @else
-                            <form action="{{ route('user.follow', ['id' => $user->id]) }}" method="POST">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="_method" value="PUT">
-                                <button type="submit" class="btn btn-outline-info" >
-                                    フォロー
-                                </button>
-                            </form>
+                            <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-info">
+                                ユーザー情報編集
+                            </a>
                         @endif
-                    @else
-                        <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-info">
-                            ユーザー情報編集
-                        </a>
-                    @endif
                     @endguest
                 </div>
             </div>

@@ -4,13 +4,13 @@
 <div class="container">  
     <div class="col-md-12" style="padding-bottom:20px;">
         @if ($file->media_type == 'image')
-            <img class="col-md-6" src="{{ route('file.get', [ 'id' => $file->id ]) }}" alt="" style="margin:10px 0; padding:0; max-height: 400px;object-fit:contain;">
+            <img class="col-md-6 show-content" src="{{ route('file.get', [ 'id' => $file->id ]) }}">
         @else
-            <video class="col-md-6" src="{{ route('file.get', [ 'id' => $file->id ]) }}" controls playsinline style="margin:10px 0; padding:0; max-height: 400px;" poster="{{ route('thumb', $file->id) }}"></video>
+            <video class="col-md-6 show-content" src="{{ route('file.get', [ 'id' => $file->id ]) }}" controls playsinline poster="{{ route('thumb', $file->id) }}"></video>
         @endif
         <form action="{{ route('file.edit', ['id' => $file->id]) }}" method="POST" enctype="multipart/form-data">
-            {{ csrf_field() }}
-            <input type="hidden" name="_method" value="PUT">
+            @csrf
+            @method('PUT')
             <div class="form-group">
 				<label for="file_name">ファイル名</label>
 				<input type="text" name="file_name" class="form-control" value="{{ $file->file_name }}" required>
@@ -24,12 +24,12 @@
        
     </div>
     {{-- 投稿削除ボタン --}}
-    <div class="col-md-3" style="margin-bottom:10px;">
+    <div class="col-md-3 margin-b10">
         @if (Auth::check())
             @if ($file->user_id === Auth::user()->id)
                 <form action="{{ route('file.delete', ['id' => $file->id]) }}" method="POST" style="display:inline" onsubmit="return submitChk()">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="_method" value="DELETE">
+                    @csrf
+                    @method('DELETE')
                     <input class="btn btn-outline-danger" type="submit" value="投稿削除">
                 </form>
             @endif
@@ -37,15 +37,3 @@
     </div>
 </div>
 @endsection
-
-<script>
-    /**
-     * 確認ダイアログの返り値によりフォーム送信
-    */
-    function submitChk () {
-        /* 確認ダイアログ表示 */
-        var flag = confirm ( "投稿を削除してもよろしいですか？\n削除したくない場合は[キャンセル]ボタンを押して下さい");
-        /* send_flg が TRUEなら送信、FALSEなら送信しない */
-        return flag;
-    }
-</script>

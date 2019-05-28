@@ -4,8 +4,8 @@
     <div class="col-md-6">
         <h4>編集</h4>      
         <form action="/users/{{$user->id}}/edit" method="POST" enctype="multipart/form-data">
-            {{ csrf_field() }}
-            <input type="hidden" name="_method" value="PUT">
+            @csrf
+            @method('PUT')
             <div class="form-group">
                 <label for="name">ユーザー名</label>
                 <input type="text" name="name" class="form-control" value="{{$user->name}}" required>
@@ -47,22 +47,10 @@
         </form>
     </div>
     <div class="col-12 col-sm-12 col-md-12">
-        <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data" style="text-alian:right;" onsubmit="return submitChk()">
-            {{ csrf_field() }}
-            <input type="hidden" name="_method" value="DELETE">
+        <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data" onsubmit="return submitChk()">
+            @csrf
+            @method('DELETE')
             <input type="submit" value="退会" class="btn btn-outline-danger" id="delete">
         </form>
     </div>
 @endsection
-
-<script>
-    /**
-     * 確認ダイアログの返り値によりフォーム送信
-    */
-    function submitChk () {
-        /* 確認ダイアログ表示 */
-        var flag = confirm ( "退会してもよろしいですか？\n退会したくない場合は[キャンセル]ボタンを押して下さい");
-        /* send_flg が TRUEなら送信、FALSEなら送信しない */
-        return flag;
-    }
-</script>

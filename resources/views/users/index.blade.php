@@ -10,9 +10,7 @@
             @foreach ($users as $user)
                 <tr>
                     <td>
-                        <a href="/users/{{ $user->id }}">
-                            <span style="text-align:center;">{{$user->name}}</span>                
-                        </a>
+                        <a href="/users/{{ $user->id }}" class="center">{{$user->name}}</a>
                     </td>
                 </tr>
             @endforeach
