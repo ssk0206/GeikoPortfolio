@@ -7,8 +7,8 @@
             <div class="col-6 col-sm-4 col-md-3" class="files center">
                 <a href="/files/{{ $file->id }}" class="center">
                     <img src="{{ route('thumb', $file->id) }}" class="img-thumbnail thumb-img">
-                </a>
-                <div class="thumb-name">{{$file->file_name}}</div>
+                    <div class="thumb-name">{{$file->file_name}}</div>
+                </a>     
             </div>
         @endforeach
         <div class="links">{{ $files->links() }}</div>

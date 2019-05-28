@@ -37,11 +37,11 @@
             </div>
             <div class="form-group">
                 <label for="skill">特技・スキル</label>
-                <textarea type="text" name="skill" class="form-control"></textarea>
+                <textarea type="text" name="skill" class="form-control">{{ $user->skill }}</textarea>
             </div>
             <div class="form-group">
                 <label for="self_introduction">自己紹介・やりたいこと</label>
-                <textarea type="text" name="self_introduction" class="form-control"></textarea>
+                <textarea type="text" name="self_introduction" class="form-control">{{ $user->self_introduction }}</textarea>
             </div>
             <input type="submit" value="変更" class="btn btn-primary" id="upload">
         </form>

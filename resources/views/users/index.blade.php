@@ -9,9 +9,7 @@
             </tr>
             @foreach ($users as $user)
                 <tr>
-                    <td>
-                        <a href="/users/{{ $user->id }}" class="center">{{$user->name}}</a>
-                    </td>
+                    <td><a href="/users/{{ $user->id }}" class="center">{{$user->name}}</a></td>
                 </tr>
             @endforeach
             {{ $users->links() }}

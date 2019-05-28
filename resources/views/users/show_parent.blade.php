@@ -5,18 +5,18 @@
     <div class="row">
         <div class="col-md-3">
             <h2><a href="{{ route('user.show', ['id' => $user->id]) }}">{{$user->name}}</a></h2>
-            <div style="margin:0 0 20px;">
-                <div style="margin:0 0 10px;">
-                    <span style="font-weight:bold">{{$user->follows_count}}</span>
+            <div class="margin-b20">
+                <div class="margin-b10">
+                    {{$user->follows_count}}
                     <a href="{{ route('user.follows', ['id' => $user->id]) }}">フォロー</a>
         
-                    <span style="font-weight:bold">{{$user->followers_count}}</span>
+                    {{$user->followers_count}}
                     <a href="{{ route('user.followers', ['id' => $user->id]) }}">フォロワー</a>
                 </div>
-                <div>{{$user->grade}}</div>
-                <div>{{$user->department}}</div>
-                <div>{{$user->skill}}</div>
-                <div>{{$user->self_introduction}}</div>
+                <div class="margin-b10"><span class="gray">学年：</span>{{$user->grade}}</div>
+                <div class="margin-b10"><span class="gray">学科：</span>{{$user->department}}</div>
+                <div class="margin-b10"><span class="gray">特技・スキル：</span><br>{{$user->skill}}</div>
+                <div><span class="gray">自己紹介・やりたいこと：</span><br>{{$user->self_introduction}}</div>
                 <hr>
                 <div>
                     @guest

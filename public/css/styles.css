@@ -27,11 +27,17 @@
 }
 
 .thumb-img {
-    object-fit: cover; height:150px;width:150px;
+    object-fit: cover;
+    height:150px;
+    width:150px;
 }
 
 .thumb-name {
-    text-align:center;font-weight:bold;max-width:150px;margin:auto;
+    text-align:center;
+    max-width:150px;
+    margin:auto;
+    margin:0;
+    padding-bottom:2px;
 }
 
 /* ページネーションリンク */
@@ -61,5 +67,9 @@
 }
 
 .comment {
-    font-weight:bold;padding-right:20px;
+    padding-right:20px;
+}
+
+.gray {
+    color: dimgray
 }
