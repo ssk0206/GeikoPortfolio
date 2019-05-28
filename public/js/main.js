@@ -7,3 +7,10 @@ function submitChk () {
     /* send_flg が TRUEなら送信、FALSEなら送信しない */
     return flag;
 }
+
+function deleteUser () {
+    /* 確認ダイアログ表示 */
+    var flag = confirm ( "退会してもよろしいですか？\n退会したくない場合は[キャンセル]ボタンを押して下さい");
+    /* send_flg が TRUEなら送信、FALSEなら送信しない */
+    return flag;
+}
