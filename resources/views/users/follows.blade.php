@@ -9,7 +9,7 @@
             </tr>
             @foreach ($user->follows as $follow)
                 <tr>  
-                    <td><a href="{{ route('user.show', ['id' => $follow->id]) }}">{{ $follow->name }}</a></td>
+                    <td><a href="{{ route('users.show', ['id' => $follow->id]) }}">{{ $follow->name }}</a></td>
                 </tr>
             @endforeach
         </table>

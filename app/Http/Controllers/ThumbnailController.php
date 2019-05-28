@@ -10,13 +10,8 @@ class ThumbnailController extends Controller
 {
     public function __invoke(int $id)
     {
-        
-        $file = File::where('id', $id)->first();
+        $file = File::findOrFail($id);
         $disk = Storage::disk('s3_transcoder');
-
-        if (! $file) {
-            abort(404);
-        }
         
         if ($file->media_type == 'image') {
             

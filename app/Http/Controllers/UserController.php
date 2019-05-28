@@ -33,19 +33,11 @@ class UserController extends Controller
     public function show(int $id)
     {
         //filesのページネーションのためにはどうすればいいか
-        #$user = User::where('id', $id)->with(['files'])->first();
-        $user = User::where('id', $id)->first();
-
-        if (! $user) {
-            abort(404);
-        }
-        
+        $user = User::findOrFail($id);
         $files = File::where('user_id', $id)->orderBy(File::CREATED_AT, 'desc')->paginate(12);
         $user = '';
         if (count($files) > 0) {
             $user = $files[0]->user;
-        } else {
-            $user = User::where('id', $id)->first();
         }
 
         return view('users.show', ['user' => $user, 'files' => $files]);
@@ -54,13 +46,9 @@ class UserController extends Controller
     /**
      * マイページ編集画面
      */
-    public function showEditForm(int $id)
+    public function edit(int $id)
     {
-        $user = User::where('id', $id)->first();
-
-        if (! $user) {
-            abort(404);
-        }
+        $user = User::findOrFail($id);
 
         return view('users.edit', ['user' => $user]);
     }
@@ -70,11 +58,7 @@ class UserController extends Controller
      */
     public function update(StoreUserInformation $request, int $id)
     {
-        $user = User::where('id', $id)->first();
-
-        if (! $user) {
-            abort(404);
-        }
+        $user = User::findOrFail($id);
  
         $user->name = $request->name;
         $user->grade = $request->grade;
@@ -83,7 +67,7 @@ class UserController extends Controller
         $user->self_introduction = $request->self_introduction;
         $user->save();
 
-        return redirect()->route('user.show', ['id' => $user->id]);
+        return redirect()->route('users.show', ['id' => $user->id]);
     }
 
     /**
@@ -91,20 +75,16 @@ class UserController extends Controller
      */
     public function follow(int $id)
     {
-        $user = User::where('id', $id)->with(['follows', 'followers'])->first();
-
-        if (! $user) {
-            abort(404);
-        }
+        $user = User::with(['follows', 'followers'])->findOrFail($id);
 
         if ($user->id === Auth::user()->id) {
-            return redirect()->route('user.show', ['id' => $user->id]);
+            return redirect()->route('users.show', ['id' => $user->id]);
         }
 
         $user->followers()->detach(Auth::user()->id);
         $user->followers()->attach(Auth::user()->id);
 
-        return redirect()->route('user.show', ['id' => $user->id]);
+        return redirect()->route('users.show', ['id' => $user->id]);
     }
 
     /**
@@ -112,15 +92,10 @@ class UserController extends Controller
      */
     public function unfollow(int $id)
     {
-        $user = User::where('id', $id)->with(['follows', 'followers'])->first();
-
-        if (! $user) {
-            abort(404);
-        }
-
+        $user = User::with(['follows', 'followers'])->findOrFail($id);
         $user->followers()->detach(Auth::user()->id);
 
-        return redirect()->route('user.show', ['id' => $user->id]);
+        return redirect()->route('users.show', ['id' => $user->id]);
     }
 
     /**
@@ -128,11 +103,7 @@ class UserController extends Controller
      */
     public function follows(int $id)
     {
-        $user = User::where('id', $id)->with(['follows'])->first();
-
-        if (! $user) {
-            abort(404);
-        }
+        $user = User::with(['follows'])->findOrFail($id);
         
         return view('users.follows', ['user' => $user]);
     }
@@ -142,11 +113,7 @@ class UserController extends Controller
      */
     public function followers(int $id)
     {
-        $user = User::where('id', $id)->with(['followers'])->first();
-
-        if (! $user) {
-            abort(404);
-        }
+        $user = User::with(['followers'])->findOrFail($id);
 
         return view('users.followers', ['user' => $user]);
     }
@@ -154,15 +121,11 @@ class UserController extends Controller
     /**
      * ユーザー退会
      */
-    public function delete(int $id)
+    public function destroy(int $id)
     {
-        $user = User::where('id', $id);
-
-        if (! $user) {
-            abort(404);
-        }
-        
+        $user = User::findOrFail($id);
         $user->delete();
+
         return redirect()->to('/')->with('message', '退会が完了しました。');
     }
 }

@@ -3,7 +3,7 @@
 @section('information')
     <div class="col-md-6">
         <h4>編集</h4>      
-        <form action="/users/{{$user->id}}/edit" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('users.update', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="form-group">
@@ -47,7 +47,7 @@
         </form>
     </div>
     <div class="col-12 col-sm-12 col-md-12">
-        <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data" onsubmit="return deleteUser()">
+        <form action="{{ route('users.destroy', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data" onsubmit="return deleteUser()">
             @csrf
             @method('DELETE')
             <input type="submit" value="退会" class="btn btn-outline-danger" id="delete">

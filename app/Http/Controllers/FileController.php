@@ -43,11 +43,7 @@ class FileController extends Controller
      */
     public function show(int $id)
     {
-        $file = File::where('id', $id)->with(['user', 'comments.user'])->first();
-
-        if (! $file) {
-            abort(404);
-        }
+        $file = File::with(['user', 'comments.user'])->findOrFail($id);
 
         return view('files.show', ['file' => $file, 'comments' => $file->comments, 'extension' => $file->extension ]);
     }
@@ -57,12 +53,7 @@ class FileController extends Controller
      */
     public function getFile(int $id, Request $request, Response $response)
     {
-        $file = File::where('id', $id)->first();       
-
-        if (! $file) {
-            abort(404);
-        }
-
+        $file = File::findOrFail($id);
         $disk = Storage::disk('s3_transcoder');
         
         if ($file->media_type == 'image') {
@@ -152,11 +143,7 @@ class FileController extends Controller
      */
     public function showEditForm(int $id)
     {
-        $file = File::where('id', $id)->first();
-
-        if (! $file) {
-            abort(404);
-        }
+        $file = File::findOrFail($id);
 
         return view('files.edit', ['file' => $file]);
     }
@@ -168,12 +155,7 @@ class FileController extends Controller
      */
     public function edit(EditFileRequest $request, int $id)
     {
-        $file = File::where('id', $id)->first();
-
-        if (! $file) {
-            abort(404);
-        }
-
+        $file = File::findOrFail($id);
         $file->file_name = $request->file_name;
         $file->description = $request->description;
         $file->save();
@@ -188,7 +170,7 @@ class FileController extends Controller
      */
     public function delete(int $id)
     {
-        $file = File::where('id', $id)->first();
+        $file = File::findOrFail($id);
 
         if ($file->user->id === Auth::user()->id) {
             $file->delete();
@@ -222,12 +204,7 @@ class FileController extends Controller
      */
     public function deleteComment(int $id, int $comment_id)
     {
-        $comment = Comment::where('id', $comment_id)->first();
-
-        if (! $comment) {
-            abort(404);
-        }
-
+        $comment = Comment::findOrFail($id);
         $user_id = $comment->user_id;
 
         if ($user_id === Auth::user()->id) {
@@ -243,12 +220,7 @@ class FileController extends Controller
      */
     public function like(int $id)
     {
-        $file = File::where('id', $id)->with('likes')->first();
-
-        if (! $file) {
-            abort(404);
-        }
-
+        $file = File::with(['likes'])->findOrFail($id);
         $file->likes()->detach(Auth::user()->id);
         $file->likes()->attach(Auth::user()->id);
 
@@ -261,12 +233,7 @@ class FileController extends Controller
      */
     public function unlike(int $id)
     {
-        $file = File::where('id', $id)->with('likes')->first();
-
-        if (! $file) {
-            abort(404);
-        }
-
+        $file = File::with(['likes'])->findOrFail($id);
         $file->likes()->detach(Auth::user()->id);
 
         return redirect()->route('file.show', ['id' => $file->id]);
